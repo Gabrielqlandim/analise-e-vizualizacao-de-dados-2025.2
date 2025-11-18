@@ -38,17 +38,17 @@ def ensure_bucket_exists(s3_client):
             except ClientError as e2:
                 raise HTTPException(
                     status_code=500,
-                    detail=f"Erro ao criar bucket no MinIO: {e2.response['Error']['Message']}",
+                    detail=f"Erro ao criar bucket no MinIO",
                 )
         
         else:
             raise HTTPException(
                 status_code=500,
-                detail=f"Erro ao acessar bucket no MinIO: {e.response['Error']['Message']}",
+                detail=f"Erro ao acessar bucket no MinIO",
             )
 
 
-app = FastAPI(title="Ingestão INMET → MinIO")
+app = FastAPI(title="Ingestão INMET MinIO")
 
 
 @app.get("/")
@@ -80,7 +80,7 @@ async def ingest_file(file: UploadFile = File(...)):
     except ClientError as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Erro ao enviar arquivo para o MinIO: {e.response['Error']['Message']}",
+            detail=f"Erro ao enviar arquivo para o MinIO",
         )
 
     return {
@@ -92,13 +92,13 @@ async def ingest_file(file: UploadFile = File(...)):
 
 @app.post("/inmet/ingest-local")
 def ingest_local():
-  
+    
     #Lê um CSV local dentro do container e envia para o MinIO.
-   
+    
     local_path = Path("/data/INMET_NE_PE_A370_SALGUEIRO_01-01-2024_A_31-12-2024.CSV")
 
     if not local_path.exists():
-        raise HTTPException(status_code=404, detail=f"Arquivo não encontrado em {local_path}")
+        raise HTTPException(status_code=404, detail=f"Arquivo não encontrado")
 
     s3_client = create_s3_client()
     ensure_bucket_exists(s3_client)
@@ -118,7 +118,7 @@ def ingest_local():
     except ClientError as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Erro ao enviar arquivo local para o MinIO: {e.response['Error']['Message']}",
+            detail=f"Erro ao enviar arquivo local para o MinIO",
         )
 
     return {
