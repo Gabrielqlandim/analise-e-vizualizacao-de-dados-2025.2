@@ -48,6 +48,4 @@ df_limpo = df_limpo.rename(columns={"TEMPERATURA DO AR - BULBO SECO, HORARIA (°
 
 df_limpo.to_csv(OUTPUT, index= False)
 
-print("Linhas originais:", len(df))
-print("Linhas após limpeza:", len(df_limpo))
 print("Arquivo salvo em:", OUTPUT)
