@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/687250955249344131/b16d4cd71d2245df8c5a3b302af83c2b/artifacts
+end_time: 1763946063736
+entry_point_name: ''
+experiment_id: '687250955249344131'
+lifecycle_stage: active
+run_id: b16d4cd71d2245df8c5a3b302af83c2b
+run_name: Linear Regression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763946057480
+status: 3
+tags: []
+user_id: PICHAU
