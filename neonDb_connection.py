@@ -1,32 +1,21 @@
 import pandas as pd
+from minio import Minio
 from sqlalchemy import create_engine
 
-df = pd.read_csv('dados_processados/salgueiro_2024_tratado.csv', parse_dates=["data_hora_utc"])
+def minio_neon():
+    minio_client = Minio("localhost:9000", access_key= "minioadmin", secret_key= "minioadmin", secure=False)
 
-#aqui é pra so levar ao banco de dados as tabelas que importam pra gente tratar
-df = df[[
-    "data_hora_utc",
-    "temperatura_c",
-    "pressao_mb",
-    "radiacao_kj_m2",
-    "umidade_relativa_pct",
-]]
+    minio_client.fget_object("inmet-raw","raw/INMET_SALGUEIRO_2024.csv", "arquivo_temp_minio_inmet.csv")
+    df = pd.read_csv("arquivo_temp_minio_inmet.csv", sep=';', encoding="latin1", header=8)
 
-user = "nenondb"
-password = "neondb_owner"
-host = "pg.neon.tech"
-porta = 5432
-nome_banco = "analise e vizualizacao de dados"
-
-string_conexao = "postgresql://neondb_owner:npg_ZyDj34mdtqLu@ep-crimson-glitter-ac9d92fb-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-
-criacao_engine = create_engine(string_conexao)
-
-df.to_sql(
-    "medidas_salgueiro",
+    string_conexao = "postgresql://neondb_owner:npg_ZyDj34mdtqLu@ep-crimson-glitter-ac9d92fb-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+    criacao_engine = create_engine(string_conexao)
+    
+    df.to_sql(
+    "inmet_bruto",
     criacao_engine,
     if_exists="append",
     index=False
-)
+    )
 
-print("Foi inserido no bd")
+minio_neon()
