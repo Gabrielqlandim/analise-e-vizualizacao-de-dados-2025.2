@@ -32,7 +32,7 @@ O pipeline é composto pelos seguintes módulos:
   ➜ http://localhost:8000/docs  
 - Permite validações antes do envio ao armazenamento.
 
-### **2. Armazenamento – PostgreSQL (NeonDB)**
+### **2. Armazenamento – PostgreSQL**
 - Armazena dados limpos e consultados pelo notebook.
 - Conexão testada pelo script `neonDb_connection.py`.
 
@@ -66,7 +66,7 @@ Dashboards exibem:
 Contêineres principais:
 - FastAPI  
 - MLflow  
-- MinIO (opcional)  
+- MinIO  
 - Jupyter Notebook  
 
 ---
