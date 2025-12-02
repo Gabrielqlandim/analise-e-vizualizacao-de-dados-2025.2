@@ -80,6 +80,8 @@ services:
 volumes:
   minio_data:
   postgresdata:
+    name: tb-postgres-data
+    driver: local
 
 networks:
   app_network:
