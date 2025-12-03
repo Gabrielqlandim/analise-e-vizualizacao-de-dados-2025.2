@@ -88,13 +88,11 @@ pip install -r requirements.txt
 
 ### 2. Comandos utilizados 
 
-python tratamento_inmet.py
+python neonDb_connection.py
 
 docker compose logs fastapi
 
 docker compose up -d --build
-
-python neonDb_connection.py
 
 ### 3. Endereços dos serviços
 
