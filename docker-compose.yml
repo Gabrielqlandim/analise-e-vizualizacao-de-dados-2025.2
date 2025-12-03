@@ -26,10 +26,11 @@ services:
       AWS_ACCESS_KEY_ID: minioadmin
       AWS_SECRET_ACCESS_KEY: minioadmin
       AWS_DEFAULT_REGION: us-east-1
+      MLFLOW_ARTIFACTS_EXTRA_PACKAGES: boto3
     command: >
       mlflow server --host 0.0.0.0 --port 5000
       --backend-store-uri postgresql://neondb_owner:npg_ZyDj34mdtqLu@ep-crimson-glitter-ac9d92fb-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require
-      --serve-artifacts --artifacts-destination s3://mlflow
+      --serve-artifacts --artifacts-destination s3://mlflow/
 
   fastapi:
     build: ./fastapi

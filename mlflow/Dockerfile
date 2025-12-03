@@ -8,4 +8,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar psycopg2 (versão binária recomendada)
-RUN pip install --no-cache-dir psycopg2-binary
+RUN pip install --no-cache-dir psycopg2-binary boto3 pymysql
+
+RUN mkdir -p /mlflow/
+
+WORKDIR /mlflow
+
+RUN echo 
