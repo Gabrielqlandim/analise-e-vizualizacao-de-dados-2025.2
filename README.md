@@ -76,36 +76,65 @@ Contêineres principais:
 ### **1. Pré-requisitos**
 ### Antes de tudo, execute:
 
+```
 docker pull ghcr.io/mlflow/mlflow:v3.6.0
 docker pull thingsboard/tb-node:4.2.1
 docker pull thingsboard/trendz:1.14.0
+```
 
 E certifique-se de que:
 
-Docker Desktop está aberto
+Docker Engine está iniciada
 
 Dependências Python instaladas:
 
+```
 pip install -r requirements.txt
+```
 
-Acesse http://localhost:9001
+Levantar os Container:
 
-Login: minioadmin; Senha: minioadmin
+```
+docker compose up -d --build
+```
+
+Apos os containers estarem ativos, execute em ordem: 
+
+```
+docker exec -it postgres psql -U root postgres
+
+CREATE DATABASE thingsboard;
+
+CREATE DATABASE trendz;
+
+docker compose run --rm -e INSTALL_TB=true -e LOAD_DEMO=true thingsboard
+```
+
+Após terminar a instalação, execute os seguintes scripts:
+
+```
+python neonDb_connection.py
+python subir_dados_thingsboard.py
+python subir_dados_tratados_thingsboard.py
+python subir_dados_ml.py
+```
+
+Depois, execute:
+
+```
+curl http://localhost:8000/migrar_dados
+```
+
+Depois, acesse: http://localhost:9001
+
+Login: minioadmin; 
+Senha: minioadmin
 
 e crie os seguintes buckets:
 
 "mlflow"
-"inmet-raw"
 
-### 2. Comandos utilizados 
-
-python neonDb_connection.py
-
-docker compose logs fastapi
-
-docker compose up -d --build
-
-### 3. Endereços dos serviços
+### 2. Endereços dos serviços
 
 Serviço	URL
 
@@ -117,11 +146,11 @@ MinIO	http://localhost:9001
 
 MLflow	http://localhost:5000
 
-### 4. Testando a API (Swagger)
+### 3. Testando a API (Swagger)
 
 Acesse:
 
-➜ http://localhost:8000/docs
+➜ http://localhost:8080/docs
 
 Clique em Try it Out → Execute
 
@@ -131,7 +160,7 @@ INMET_NE_PE_A370_SALGUEIRO_01-01-2024_A_31-12-2024.CSV
 
 Execute e verifique a resposta.
 
-### 5. Log de Experimentos com MLflow
+### 4. Log de Experimentos com MLflow
 
 Execute todas as células do Notebook em:
 
