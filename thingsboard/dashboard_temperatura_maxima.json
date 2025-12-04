@@ -1,0 +1,275 @@
+{
+  "title": "dashboard temperatura maxima",
+  "image": null,
+  "mobileHide": false,
+  "mobileOrder": null,
+  "configuration": {
+    "widgets": {
+      "48eee356-d0c7-11f0-b078-a57e54086797": {
+        "id": "48eee356-d0c7-11f0-b078-a57e54086797",
+        "type": "latest",
+        "config": {
+          "showTitle": true,
+          "title": "Basic Table Widget",
+          "datasources": [
+            {
+              "type": "entity",
+              "entityAliasId": "48eee354-d0c7-11f0-b078-a57e54086797",
+              "dataKeys": [
+                {
+                  "name": "name",
+                  "type": "entityField",
+                  "label": "Name",
+                  "settings": {
+                    "columnWidth": "0px",
+                    "cellStyleFunction": "",
+                    "useCellContentFunction": false,
+                    "cellContentFunction": "",
+                    "defaultColumnVisibility": "visible",
+                    "columnSelectionToDisplay": "enabled"
+                  },
+                  "color": "#2196f3"
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "rowClick": [
+              {
+                "id": "48ef0a67-d0c7-11f0-b078-a57e54086797",
+                "name": "On row click Action",
+                "type": "updateDashboardState",
+                "targetDashboardStateId": "default",
+                "stateEntityParamName": "SelectedEntity thermostat 19eb33e2-c82f-4b2d-8889-d758ca423b5c",
+                "setEntityId": true
+              }
+            ]
+          },
+          "settings": {
+            "enableSearch": true,
+            "enableSelectColumnDisplay": true,
+            "enableStickyHeader": true,
+            "reserveSpaceForHiddenAction": true,
+            "displayEntityName": false,
+            "displayEntityLabel": false,
+            "displayEntityType": false,
+            "displayPagination": false,
+            "defaultPageSize": 10,
+            "defaultSortOrder": "name",
+            "useRowStyleFunction": false,
+            "entitiesTitle": "Entities"
+          },
+          "timewindow": {
+            "displayValue": "",
+            "hideAggregation": false,
+            "hideAggInterval": false,
+            "hideTimezone": false,
+            "selectedTab": 0,
+            "realtime": {
+              "realtimeType": 1,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideQuickInterval": false
+            },
+            "history": {
+              "historyType": 0,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "fixedTimewindow": {
+                "startTimeMs": 1764762127992,
+                "endTimeMs": 1764848527992
+              },
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideFixedInterval": false,
+              "hideQuickInterval": false
+            },
+            "aggregation": {
+              "type": "AVG",
+              "limit": 25000
+            }
+          }
+        },
+        "typeFullFqn": "system.cards.entities_table"
+      },
+      "48ef0a68-d0c7-11f0-b078-a57e54086797": {
+        "id": "48ef0a68-d0c7-11f0-b078-a57e54086797",
+        "typeFullFqn": "tenant.trendz_bundle.trendz_view_latest",
+        "type": "latest",
+        "config": {
+          "showTitle": true,
+          "title": "New Trendz Widget",
+          "datasources": [
+            {
+              "type": "entity",
+              "entityAliasId": "48eee355-d0c7-11f0-b078-a57e54086797",
+              "dataKeys": [
+                {
+                  "name": "name",
+                  "type": "entityField",
+                  "label": "Name",
+                  "settings": {
+                    "columnWidth": "0px",
+                    "cellStyleFunction": "",
+                    "useCellContentFunction": false,
+                    "cellContentFunction": "",
+                    "defaultColumnVisibility": "visible",
+                    "columnSelectionToDisplay": "enabled"
+                  },
+                  "color": "#2196f3"
+                }
+              ]
+            }
+          ],
+          "settings": {
+            "viewUrl": "http://localhost:8888/trendz/viewMode/e7e4a4e3-d0b3-11f0-b078-a57e54086797",
+            "filterName": "thermostat"
+          },
+          "timewindow": {
+            "displayValue": "",
+            "hideAggregation": false,
+            "hideAggInterval": false,
+            "hideTimezone": false,
+            "selectedTab": 0,
+            "realtime": {
+              "realtimeType": 1,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideQuickInterval": false
+            },
+            "history": {
+              "historyType": 0,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "fixedTimewindow": {
+                "startTimeMs": 1764762127992,
+                "endTimeMs": 1764848527992
+              },
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideFixedInterval": false,
+              "hideQuickInterval": false
+            },
+            "aggregation": {
+              "type": "AVG",
+              "limit": 25000
+            }
+          }
+        }
+      }
+    },
+    "states": {
+      "default": {
+        "name": "dashboard temperatura maxima",
+        "root": true,
+        "layouts": {
+          "main": {
+            "widgets": {
+              "48eee356-d0c7-11f0-b078-a57e54086797": {
+                "sizeX": 8,
+                "sizeY": 8,
+                "row": 0,
+                "col": 0
+              },
+              "48ef0a68-d0c7-11f0-b078-a57e54086797": {
+                "sizeX": 16,
+                "sizeY": 8,
+                "row": 0,
+                "col": 8
+              }
+            },
+            "gridSettings": {
+              "layoutType": "default",
+              "backgroundColor": "#eeeeee",
+              "columns": 24,
+              "margin": 10,
+              "outerMargin": true,
+              "backgroundSizeMode": "100%"
+            }
+          }
+        }
+      }
+    },
+    "entityAliases": {
+      "48eee354-d0c7-11f0-b078-a57e54086797": {
+        "id": "48eee354-d0c7-11f0-b078-a57e54086797",
+        "alias": "All Entities: thermostat 19eb33e2-c82f-4b2d-8889-d758ca423b5c",
+        "filter": {
+          "resolveMultiple": true,
+          "type": "deviceType",
+          "deviceTypes": [
+            "thermostat",
+            "thermostat"
+          ]
+        }
+      },
+      "48eee355-d0c7-11f0-b078-a57e54086797": {
+        "id": "48eee355-d0c7-11f0-b078-a57e54086797",
+        "alias": "SelectedEntity thermostat 19eb33e2-c82f-4b2d-8889-d758ca423b5c",
+        "filter": {
+          "resolveMultiple": false,
+          "type": "stateEntity",
+          "stateEntityParamName": "SelectedEntity thermostat 19eb33e2-c82f-4b2d-8889-d758ca423b5c",
+          "defaultStateEntity": {
+            "id": "ceaf2d50-d0aa-11f0-a5a1-b14c98588532",
+            "entityType": "DEVICE"
+          }
+        }
+      }
+    },
+    "filters": {},
+    "timewindow": {
+      "displayValue": "",
+      "hideAggregation": false,
+      "hideAggInterval": false,
+      "hideTimezone": false,
+      "selectedTab": 0,
+      "realtime": {
+        "realtimeType": 0,
+        "interval": 1000,
+        "timewindowMs": 60000,
+        "quickInterval": "CURRENT_DAY",
+        "hideInterval": false,
+        "hideLastInterval": false,
+        "hideQuickInterval": false
+      },
+      "history": {
+        "historyType": 0,
+        "interval": 1000,
+        "timewindowMs": 60000,
+        "fixedTimewindow": {
+          "startTimeMs": 1764762127992,
+          "endTimeMs": 1764848527992
+        },
+        "quickInterval": "CURRENT_DAY",
+        "hideInterval": false,
+        "hideLastInterval": false,
+        "hideFixedInterval": false,
+        "hideQuickInterval": false
+      },
+      "aggregation": {
+        "type": "AVG",
+        "limit": 25000
+      }
+    },
+    "settings": {
+      "stateControllerId": "entity",
+      "showTitle": false,
+      "showDashboardsSelect": true,
+      "showEntitiesSelect": true,
+      "showDashboardTimewindow": true,
+      "showDashboardExport": true,
+      "toolbarAlwaysOpen": true
+    }
+  },
+  "name": "dashboard temperatura maxima",
+  "resources": []
+}

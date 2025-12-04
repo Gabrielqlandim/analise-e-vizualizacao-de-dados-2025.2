@@ -1,0 +1,275 @@
+{
+  "title": "dashboard pressao atmosferica maxima",
+  "image": null,
+  "mobileHide": false,
+  "mobileOrder": null,
+  "configuration": {
+    "widgets": {
+      "16ab651c-d0b3-11f0-b078-a57e54086797": {
+        "id": "16ab651c-d0b3-11f0-b078-a57e54086797",
+        "type": "latest",
+        "config": {
+          "showTitle": true,
+          "title": "Basic Table Widget",
+          "datasources": [
+            {
+              "type": "entity",
+              "entityAliasId": "16ab16fa-d0b3-11f0-b078-a57e54086797",
+              "dataKeys": [
+                {
+                  "name": "name",
+                  "type": "entityField",
+                  "label": "Name",
+                  "settings": {
+                    "columnWidth": "0px",
+                    "cellStyleFunction": "",
+                    "useCellContentFunction": false,
+                    "cellContentFunction": "",
+                    "defaultColumnVisibility": "visible",
+                    "columnSelectionToDisplay": "enabled"
+                  },
+                  "color": "#2196f3"
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "rowClick": [
+              {
+                "id": "16ab651d-d0b3-11f0-b078-a57e54086797",
+                "name": "On row click Action",
+                "type": "updateDashboardState",
+                "targetDashboardStateId": "default",
+                "stateEntityParamName": "SelectedEntity thermostat e3f2a395-fc94-4ba0-9a2b-b9ce1ae94a10",
+                "setEntityId": true
+              }
+            ]
+          },
+          "settings": {
+            "enableSearch": true,
+            "enableSelectColumnDisplay": true,
+            "enableStickyHeader": true,
+            "reserveSpaceForHiddenAction": true,
+            "displayEntityName": false,
+            "displayEntityLabel": false,
+            "displayEntityType": false,
+            "displayPagination": false,
+            "defaultPageSize": 10,
+            "defaultSortOrder": "name",
+            "useRowStyleFunction": false,
+            "entitiesTitle": "Entities"
+          },
+          "timewindow": {
+            "displayValue": "",
+            "hideAggregation": false,
+            "hideAggInterval": false,
+            "hideTimezone": false,
+            "selectedTab": 0,
+            "realtime": {
+              "realtimeType": 1,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideQuickInterval": false
+            },
+            "history": {
+              "historyType": 0,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "fixedTimewindow": {
+                "startTimeMs": 1764726885449,
+                "endTimeMs": 1764813285449
+              },
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideFixedInterval": false,
+              "hideQuickInterval": false
+            },
+            "aggregation": {
+              "type": "AVG",
+              "limit": 25000
+            }
+          }
+        },
+        "typeFullFqn": "system.cards.entities_table"
+      },
+      "16ab8c2e-d0b3-11f0-b078-a57e54086797": {
+        "id": "16ab8c2e-d0b3-11f0-b078-a57e54086797",
+        "typeFullFqn": "tenant.trendz_bundle.trendz_view_latest",
+        "type": "latest",
+        "config": {
+          "showTitle": true,
+          "title": "New Trendz Widget",
+          "datasources": [
+            {
+              "type": "entity",
+              "entityAliasId": "16ab3e0b-d0b3-11f0-b078-a57e54086797",
+              "dataKeys": [
+                {
+                  "name": "name",
+                  "type": "entityField",
+                  "label": "Name",
+                  "settings": {
+                    "columnWidth": "0px",
+                    "cellStyleFunction": "",
+                    "useCellContentFunction": false,
+                    "cellContentFunction": "",
+                    "defaultColumnVisibility": "visible",
+                    "columnSelectionToDisplay": "enabled"
+                  },
+                  "color": "#2196f3"
+                }
+              ]
+            }
+          ],
+          "settings": {
+            "viewUrl": "http://localhost:8888/trendz/viewMode/e191cc21-d0b2-11f0-b078-a57e54086797",
+            "filterName": "thermostat"
+          },
+          "timewindow": {
+            "displayValue": "",
+            "hideAggregation": false,
+            "hideAggInterval": false,
+            "hideTimezone": false,
+            "selectedTab": 0,
+            "realtime": {
+              "realtimeType": 1,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideQuickInterval": false
+            },
+            "history": {
+              "historyType": 0,
+              "interval": 1000,
+              "timewindowMs": 60000,
+              "fixedTimewindow": {
+                "startTimeMs": 1764726885449,
+                "endTimeMs": 1764813285449
+              },
+              "quickInterval": "CURRENT_DAY",
+              "hideInterval": false,
+              "hideLastInterval": false,
+              "hideFixedInterval": false,
+              "hideQuickInterval": false
+            },
+            "aggregation": {
+              "type": "AVG",
+              "limit": 25000
+            }
+          }
+        }
+      }
+    },
+    "states": {
+      "default": {
+        "name": "dashboard Dados Brutos",
+        "root": true,
+        "layouts": {
+          "main": {
+            "widgets": {
+              "16ab651c-d0b3-11f0-b078-a57e54086797": {
+                "sizeX": 8,
+                "sizeY": 8,
+                "row": 0,
+                "col": 0
+              },
+              "16ab8c2e-d0b3-11f0-b078-a57e54086797": {
+                "sizeX": 16,
+                "sizeY": 8,
+                "row": 0,
+                "col": 8
+              }
+            },
+            "gridSettings": {
+              "layoutType": "default",
+              "backgroundColor": "#eeeeee",
+              "columns": 24,
+              "margin": 10,
+              "outerMargin": true,
+              "backgroundSizeMode": "100%"
+            }
+          }
+        }
+      }
+    },
+    "entityAliases": {
+      "16ab16fa-d0b3-11f0-b078-a57e54086797": {
+        "id": "16ab16fa-d0b3-11f0-b078-a57e54086797",
+        "alias": "All Entities: thermostat e3f2a395-fc94-4ba0-9a2b-b9ce1ae94a10",
+        "filter": {
+          "resolveMultiple": true,
+          "type": "deviceType",
+          "deviceTypes": [
+            "thermostat",
+            "thermostat"
+          ]
+        }
+      },
+      "16ab3e0b-d0b3-11f0-b078-a57e54086797": {
+        "id": "16ab3e0b-d0b3-11f0-b078-a57e54086797",
+        "alias": "SelectedEntity thermostat e3f2a395-fc94-4ba0-9a2b-b9ce1ae94a10",
+        "filter": {
+          "resolveMultiple": false,
+          "type": "stateEntity",
+          "stateEntityParamName": "SelectedEntity thermostat e3f2a395-fc94-4ba0-9a2b-b9ce1ae94a10",
+          "defaultStateEntity": {
+            "id": "ceaf2d50-d0aa-11f0-a5a1-b14c98588532",
+            "entityType": "DEVICE"
+          }
+        }
+      }
+    },
+    "filters": {},
+    "timewindow": {
+      "displayValue": "",
+      "hideAggregation": false,
+      "hideAggInterval": false,
+      "hideTimezone": false,
+      "selectedTab": 0,
+      "realtime": {
+        "realtimeType": 0,
+        "interval": 1000,
+        "timewindowMs": 60000,
+        "quickInterval": "CURRENT_DAY",
+        "hideInterval": false,
+        "hideLastInterval": false,
+        "hideQuickInterval": false
+      },
+      "history": {
+        "historyType": 0,
+        "interval": 1000,
+        "timewindowMs": 60000,
+        "fixedTimewindow": {
+          "startTimeMs": 1764726885449,
+          "endTimeMs": 1764813285449
+        },
+        "quickInterval": "CURRENT_DAY",
+        "hideInterval": false,
+        "hideLastInterval": false,
+        "hideFixedInterval": false,
+        "hideQuickInterval": false
+      },
+      "aggregation": {
+        "type": "AVG",
+        "limit": 25000
+      }
+    },
+    "settings": {
+      "stateControllerId": "entity",
+      "showTitle": false,
+      "showDashboardsSelect": true,
+      "showEntitiesSelect": true,
+      "showDashboardTimewindow": true,
+      "showDashboardExport": true,
+      "toolbarAlwaysOpen": true
+    }
+  },
+  "name": "dashboard pressao atmosferica maxima",
+  "resources": []
+}
