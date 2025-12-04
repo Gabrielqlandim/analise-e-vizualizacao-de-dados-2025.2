@@ -4,12 +4,18 @@ from botocore.client import Config
 from botocore.exceptions import ClientError
 import os
 from pathlib import Path
+import requests
+import pandas as pd
 
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "minio:9000")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin")
 MINIO_BUCKET = os.getenv("MINIO_BUCKET", "inmet-raw")
 
+TB_URL = os.getenv("THINGSBOARD_URL", "http://thingsboard:8080")  
+TB_DEVICE_ID = "5fa1eb90-cfb6-11f0-b22f-fbaf6221b629"
+
+app = FastAPI(title="Ingestão INMET MinIO")
 
 def create_s3_client():
     #Cria um client S3/MinIO 
@@ -48,43 +54,28 @@ def ensure_bucket_exists(s3_client):
             )
 
 
-app = FastAPI(title="Ingestão INMET MinIO")
-
-
 @app.get("/")
 def root():
     return {"status": "ok", "service": "fastapi-inmet"}
 
 
-@app.post("/inmet/ingest-file")
-async def ingest_file(file: UploadFile = File(...)):
-    
-    #Recebe um CSV via upload e salva no MinIO, no bucket inmet-raw.
-    
-    if not file.filename.lower().endswith(".csv"):
-        raise HTTPException(status_code=400, detail="Envie um arquivo .csv")
 
+def upload_dataframe_to_minio(df, key: str):
     s3_client = create_s3_client()
     ensure_bucket_exists(s3_client)
 
-    content = await file.read()
-    key = f"raw/{file.filename}"
-
-    try:
-        s3_client.put_object(
-            Bucket=MINIO_BUCKET,
-            Key=key,
-            Body=content,
-            ContentType="text/csv",
-        )
-    except ClientError as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Erro ao enviar arquivo para o MinIO",
-        )
+    # Converter DataFrame → CSV em memória
+    csv_bytes = df.to_csv(index=False).encode("latin1")
+    
+    s3_client.put_object(
+        Bucket=MINIO_BUCKET,
+        Key=key,
+        Body=csv_bytes,
+        ContentType="text/csv"
+    )
 
     return {
-        "message": "Arquivo enviado para o MinIO com sucesso!",
+        "message": "DataFrame enviado para o MinIO com sucesso!",
         "bucket": MINIO_BUCKET,
         "key": key,
     }
@@ -126,3 +117,92 @@ def ingest_local():
         "bucket": MINIO_BUCKET,
         "key": key,
     }
+
+
+def authenticate_thingsboard():
+    url = f"{TB_URL}/api/auth/login"
+
+    json = {
+            "username": "tenant@thingsboard.org",
+            "password": "tenant"
+            }
+    
+    response = requests.post(url, json=json)
+
+    if response.status_code != 200:
+        raise Exception(f"Erro ao autenticar: {response.text}")
+    
+    data = response.json()
+
+    token = data.get("token") or data.get("jwtToken")
+
+    if not token:
+        raise Exception("Token não encontrado na resposta do ThingsBoard.")
+
+    return token
+
+
+def get_device_id_by_name(device_name: str):
+
+    device_name = 'Dados Brutos'
+
+    jwt = authenticate_thingsboard()
+
+    headers = {"X-Authorization": f"Bearer {jwt}"}
+
+    url = f"{TB_URL}/api/tenant/devices?deviceName={device_name}"
+    
+    resp = requests.get(url, headers=headers)
+
+    if resp.status_code != 200:
+        raise Exception(f"Erro ao buscar device: {resp.text}")
+
+    data = resp.json()
+    return data["id"]["id"]
+
+
+@app.get("/migrar_dados")
+def ingest_from_thingsboard():
+
+
+    #Endpoint de telemetria
+    url = (
+        f"{TB_URL}/api/plugins/telemetry/DEVICE/"
+        f"{TB_DEVICE_ID}/values/timeseries"
+    )
+
+    headers = {
+        "X-Authorization": f"Bearer {authenticate_thingsboard()}"
+    }
+
+    try:
+        resp = requests.get(url, headers=headers, timeout=10)
+        resp.raise_for_status()
+    except Exception as e:
+        raise HTTPException(500, f"Erro ao consultar ThingsBoard: {e}")
+
+    data = resp.json()
+
+    if not data:
+        raise HTTPException(404, "Nenhuma telemetria disponível no ThingsBoard.")
+
+    #Converter telemetria para DataFrame
+    #Formato retornado: { "temperatura": [ {"ts": 123, "value": "28.1"} ] }
+    registros = []
+
+    for chave, valores in data.items():
+        for ponto in valores:
+            registros.append({
+                "ts": ponto["ts"],
+                chave: ponto["value"]
+            })
+
+    if not registros:
+        raise HTTPException(404, "Não há dados válidos de telemetria.")
+
+    df = pd.DataFrame(registros)
+
+    #Consolidar múltiplas variáveis com a mesma timestamp
+    df = df.groupby("ts").first().reset_index()
+
+    return upload_dataframe_to_minio(df, "raw/INMET_SALGUEIRO_2024.csv")

@@ -77,6 +77,8 @@ Contêineres principais:
 ### Antes de tudo, execute:
 
 docker pull ghcr.io/mlflow/mlflow:v3.6.0
+docker pull thingsboard/tb-node:4.2.1
+docker pull thingsboard/trendz:1.14.0
 
 E certifique-se de que:
 
@@ -85,6 +87,15 @@ Docker Desktop está aberto
 Dependências Python instaladas:
 
 pip install -r requirements.txt
+
+Acesse http://localhost:9001
+
+Login: minioadmin; Senha: minioadmin
+
+e crie os seguintes buckets:
+
+"mlflow"
+"inmet-raw"
 
 ### 2. Comandos utilizados 
 
@@ -119,6 +130,29 @@ No endpoint POST /Ingest-File, envie o arquivo bruto:
 INMET_NE_PE_A370_SALGUEIRO_01-01-2024_A_31-12-2024.CSV
 
 Execute e verifique a resposta.
+
+### 5. Log de Experimentos com MLflow
+
+Execute todas as células do Notebook em:
+
+/notebooks/analise_dados_do_bd.ipynb
+
+Verifique se uma nova entrada em Primeiro Experimento foi gerada corretamente:
+
+Accesse http://localhost:5000
+
+Acesse a aba de experimentos e clique em "Primeiro Experimento"
+
+Espera-se uma nova entrada do log gerado pelo script da última célula do notebook
+
+Verifique se uma nova entrada de artefatos foi gerada no bucket do MinIO:
+
+Acesse http://localhost:9001
+
+Login: minioadmin; Senha: minioadmin
+
+Abra o bucket "mlflow" e procure o artefato gerado.
+
 
 ## **Resultados do Modelo**
 
