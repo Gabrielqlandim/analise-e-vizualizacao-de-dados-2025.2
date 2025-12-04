@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import requests
 import pandas as pd
+import time
 
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "minio:9000")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
@@ -29,18 +30,19 @@ def create_s3_client():
     )
 
 
-def ensure_bucket_exists(s3_client):
+def ensure_bucket_exists(s3_client, bucket):
     #Garante que o bucket exista, sem derrubar o servidor se der erro
     try:
         #tenta ver se o bucket existe
-        s3_client.head_bucket(Bucket=MINIO_BUCKET)
+        s3_client.head_bucket(Bucket=bucket)
     except ClientError as e:
         error_code = e.response["Error"]["Code"]
 
         #se não existir, tenta criar
         if error_code in ("404", "NoSuchBucket", "404 Not Found"):
             try:
-                s3_client.create_bucket(Bucket=MINIO_BUCKET)
+                s3_client.create_bucket(Bucket=bucket)
+
             except ClientError as e2:
                 raise HTTPException(
                     status_code=500,
@@ -62,7 +64,7 @@ def root():
 
 def upload_dataframe_to_minio(df, key: str):
     s3_client = create_s3_client()
-    ensure_bucket_exists(s3_client)
+    ensure_bucket_exists(s3_client, MINIO_BUCKET)
 
     # Converter DataFrame → CSV em memória
     csv_bytes = df.to_csv(index=False).encode("latin1")
@@ -92,7 +94,10 @@ def ingest_local():
         raise HTTPException(status_code=404, detail=f"Arquivo não encontrado")
 
     s3_client = create_s3_client()
-    ensure_bucket_exists(s3_client)
+    ensure_bucket_exists(s3_client, MINIO_BUCKET)
+
+    #Cria o buket do mlflow
+    ensure_bucket_exists(s3_client, "mlflow")
 
     with local_path.open("rb") as f:
         content = f.read()
@@ -142,9 +147,7 @@ def authenticate_thingsboard():
     return token
 
 
-def get_device_id_by_name(device_name: str):
-
-    device_name = 'Dados Brutos'
+def get_device_id_by_name(device_name):
 
     jwt = authenticate_thingsboard()
 
@@ -164,15 +167,17 @@ def get_device_id_by_name(device_name: str):
 @app.get("/migrar_dados")
 def ingest_from_thingsboard():
 
+    device_id = get_device_id_by_name("Thermostat T2")
 
     #Endpoint de telemetria
-    url = (
-        f"{TB_URL}/api/plugins/telemetry/DEVICE/"
-        f"{TB_DEVICE_ID}/values/timeseries"
-    )
+    url = f"{TB_URL}/api/plugins/telemetry/DEVICE/{device_id}/values/timeseries"
+
+
+    jwt = authenticate_thingsboard()
 
     headers = {
-        "X-Authorization": f"Bearer {authenticate_thingsboard()}"
+        "X-Authorization": f"Bearer {jwt}",
+        "accept": "application/json"
     }
 
     try:

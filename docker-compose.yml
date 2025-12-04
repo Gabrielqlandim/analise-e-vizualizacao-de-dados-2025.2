@@ -11,6 +11,8 @@ services:
     command: server /data --console-address ":9001"
     volumes:
       - minio_data:/data
+    networks:
+      - app_network
 
   mlflow:
     build:
@@ -46,6 +48,8 @@ services:
       - minio
     volumes:
       - ./data:/data:ro
+    networks:
+      - app_network
 
   postgres:
     restart: always
